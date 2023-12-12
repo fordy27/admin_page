@@ -1,3 +1,6 @@
+import 'package:admin_page2/items.dart';
+import 'package:admin_page2/logout.dart';
+import 'package:admin_page2/view_orders.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -34,21 +37,38 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Image.asset(
+                'assets/image/cartel.jpg',
+                width: 60,
+                height: 60,
+              ),
+            ),
+            Text('Dashboard'),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             UserInfo(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             MonthlySalesGraph(
               monthlySalesData: monthlySalesData,
             ),
           ],
         ),
       ),
-      drawer: myDrawer, // Add drawer here
+      drawer: myDrawer(context), // Pass the context to myDrawer function
     );
   }
 }
@@ -68,8 +88,8 @@ class UserInfo extends StatelessWidget {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            Text('Name: John Doe'),
-            Text('Email: john.doe@example.com'),
+            Text('Name: Jeford Glenn'),
+            Text('Email: drofejl25@gmail.com'),
             Text('Role: Admin'),
           ],
         ),
@@ -126,7 +146,7 @@ class MonthlySalesGraph extends StatelessWidget {
                             (index + 1).toDouble(), monthlySalesData[index]),
                       ),
                       isCurved: true,
-                      colors: [Colors.blue],
+                      colors: [Color.fromARGB(255, 250, 41, 41)],
                       barWidth: 4,
                       isStrokeCapRound: true,
                       belowBarData: BarAreaData(show: false),
@@ -152,21 +172,19 @@ class MonthlySalesGraph extends StatelessWidget {
                     ),
                     leftTitles: SideTitles(
                       showTitles: true,
-                      // Set the interval to display whole numbers
                       getTextStyles: (context, value) => const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),
                       getTitles: (value) {
-                        return '${value.toInt()}'; // Display the whole numbers as strings
+                        return '${value.toInt()}';
                       },
                       margin: 8,
                     ),
                   ),
-                  minX: 1, // Adjust the minimum x value to 0
-                  maxX: (monthlySalesData.length - 1)
-                      .toDouble(), // Set the maximum x value
+                  minX: 1,
+                  maxX: (monthlySalesData.length - 1).toDouble(),
                   minY: 0,
                   maxY: 12000,
                 ),
@@ -179,47 +197,54 @@ class MonthlySalesGraph extends StatelessWidget {
   }
 }
 
-var myAppBar = AppBar(
-  title: Text('Dashboard'),
-);
-
-var myDrawer = Drawer(
-  child: ListView(
-    children: [
-      DrawerHeader(child: Text("A D M I N")),
-      ListTile(
-        leading: Icon(Icons.home),
-        title: Text("DASHBOARD"),
-        onTap: () {
-          // Navigator.pushNamed(context, '/dashboard');
-          // Navigate to the dashboard screen
-        },
+Widget myDrawer(BuildContext context) {
+  return Drawer(
+    child: Container(
+      color: Color.fromARGB(255, 248, 244, 244),
+      child: ListView(
+        children: [
+          DrawerHeader(
+            child: Icon(Icons.admin_panel_settings_rounded),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text("DASHBOARD"),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DashboardScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopify),
+            title: Text("ORDERS"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => OrderListApp()));
+              // Navigate to the message screen
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shop),
+            title: Text("ITEMS"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ClothingStorePage()));
+              // Navigate to the settings screen
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text("LOGOUT"),
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LogoutPage()));
+              // Perform logout action here
+            },
+          ),
+        ],
       ),
-      ListTile(
-        leading: Icon(Icons.chat),
-        title: Text("MESSAGE"),
-        onTap: () {
-          // Navigator.pushNamed(context, '/message');
-          // Navigate to the message screen
-        },
-      ),
-      ListTile(
-        leading: Icon(Icons.settings),
-        title: Text("SETTINGS"),
-        onTap: () {
-          // Navigator.pushNamed(context, '/settings');
-          // Navigate to the settings screen
-        },
-      ),
-      ListTile(
-        leading: Icon(Icons.logout),
-        title: Text("LOGOUT"),
-        onTap: () {
-          // Perform logout action here
-          // For example: Clear authentication status or user data
-          // Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-        },
-      ),
-    ],
-  ),
-);
+    ),
+  );
+}
