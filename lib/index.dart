@@ -12,6 +12,7 @@ class DashboardApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: DashboardScreen(),
     );
   }
@@ -51,7 +52,6 @@ class DashboardScreen extends StatelessWidget {
                 height: 60,
               ),
             ),
-            Text('Dashboard'),
           ],
         ),
       ),
@@ -141,9 +141,8 @@ class MonthlySalesGraph extends StatelessWidget {
                   lineBarsData: [
                     LineChartBarData(
                       spots: List.generate(
-                        monthlySalesData.length,
-                        (index) => FlSpot(
-                            (index + 1).toDouble(), monthlySalesData[index]),
+                        12,
+                        (index) => FlSpot((index + 1), monthlySalesData[index]),
                       ),
                       isCurved: true,
                       colors: [Color.fromARGB(255, 250, 41, 41)],
@@ -184,7 +183,8 @@ class MonthlySalesGraph extends StatelessWidget {
                     ),
                   ),
                   minX: 1,
-                  maxX: (monthlySalesData.length - 1).toDouble(),
+                  // maxX: (monthlySalesData.length - 1).toDouble(),
+                  maxX: 12,
                   minY: 0,
                   maxY: 12000,
                 ),
